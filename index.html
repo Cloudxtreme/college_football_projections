@@ -1,0 +1,129 @@
+
+<!doctype html>
+{% autoescape true %}
+<html lang="en">
+<head>
+  <title>CFB Projections</title>
+  <meta charset="utf-8">
+  <meta name= "viewport" content="width=device-width">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+  <script src="javascript.js"></script>
+
+
+</head>
+<body>
+
+<input type = "hidden" id="schoolColor" value="{{schoolColor}}">
+
+<div id="content">
+
+<div id="intro">
+<a href="/">College Football Projections</a>
+</div><!-- close intro div -->
+
+{%if futureschedule or pastschedule%}
+<div id="teamName">
+{{capwords}} {{nickname}}
+</div>
+{%endif%}
+
+<div id="entryform">
+    <form id="schoolEntryForm" method="post" action="">
+   Enter a school's name<br/>to see their schedule:
+    <div class = "ui-widget">   
+   <input id = "teamInput" name = "teamInput" type = "text">
+   <input type = "submit" value="submit"> 
+    </div>
+   </form>
+</div>
+
+{%if futureschedule or pastschedule%}
+<div id = "icon">
+<img src = "icons/{{imageName}}.gif"/>
+</div>
+{%endif%}
+
+{%if top25%}
+<div id="tableintro">AP Rankings (updated 9/5/14):</div>
+<table id="top25">
+{%for t in top25%}
+<tr>
+<td class="rankingcolumn">{{t.ranking}}</td>
+<td class="opponent rankedteamcolumn" data-fbs = "1">{{t.team}}</td>  
+</tr>
+{%endfor%}
+</table>
+{%endif%}
+
+{%if pastschedule or futureschedule%}
+<div class="tableExplan">
+AP rankings are listed next to opponents.
+</div>
+{%endif%}
+
+{%if pastschedule%}
+<div class="tableExplan">
+Last column shows {{capwords}}'s odds of winning, calculated before the game was played.
+</div>
+<table class="output">
+{%for game in pastschedule%}
+<tr>
+<td class="narrowcolumn datecolumn">{{game.date}}</td>
+<td class="opponentcolumn">{{game.site}}{{game.ranking}}  <span class = "opponent" data-fbs = "{{game.fbs}}">{{game.opponent}}</span>{{game.neutral}}</td>
+<td class="scorecolumn">{{game.score}}</td>
+<td class="narrowcolumn oddscolumn">{{game.odds}}</td>
+</tr>
+{%endfor%}
+</table>
+{%endif%}
+
+{%if futureschedule%}
+<div class="tableExplan">
+Last column shows {{capwords}}'s odds of winning.
+</div>
+<table class="output">
+{%for game in futureschedule%}
+<tr>
+<td class="narrowcolumn datecolumn">{{game.date}}</td>
+<td class="opponentcolumn">{{game.site}}{{game.ranking}}  <span class = "opponent" data-fbs = "{{game.fbs}}">{{game.opponent}}</span>{{game.neutral}}</td>
+<td class="scorecolumn"></td>
+<td class="narrowcolumn oddscolumn">{{game.odds}}</td>
+</tr>
+{%endfor%}
+</table>
+<div class = "footnote" id = "footnote1">{{footnote}}</div>
+{%endif%}
+
+{%if conference%}
+<table id="confTable">
+<tr><td class="confName">{{conference}}</td></tr>
+{%if confOpponentInfo%}
+ {%for opponent in confOpponentInfo%}
+  <tr>
+    <td> <span class="opponent {{opponent.selectedTeam}}" data-fbs = "1" >{{opponent.team}}</span> </td>  
+    <td>{{opponent.record}}</td>
+  </tr>
+ {%endfor%}
+{%endif%}
+</table>
+{%endif%}
+
+<div class = "footnote" id = "footnote2">{{footnote}}</div>
+
+
+<div id="tooltip">
+  Sorry, schedules are only available for FBS teams
+<div id="tooltipclose">close</div>
+</div>
+
+<br/>
+<div id="attribution">Statistical Analysis: Jared Cross<br/>Web Development: Navid Karimeddiny</div>
+
+</div><!-- close content div -->
+
+</body>
+
+</html>
+{% endautoescape %}
